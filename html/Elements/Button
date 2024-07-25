@@ -1,0 +1,11 @@
+<div class="submit">
+  <div class="extra-buttons">
+      <input type="button" id=<%$Id%> name=<%$Name%> value="<%$Label%>" class="button btn btn-secondary" />
+  </div>
+</div>
+
+<%ARGS>
+$Label => loc('ClearDraft')
+$Name  => undef
+$Id    => undef
+</%ARGS>

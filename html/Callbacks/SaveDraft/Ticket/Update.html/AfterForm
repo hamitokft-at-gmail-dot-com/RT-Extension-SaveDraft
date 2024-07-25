@@ -1,0 +1,59 @@
+<%init>
+    my $id = $ARGS{'id'};
+</%init>
+
+<script>
+    const ticketId    = "<% $id %>" || 'unknown';
+
+    let   action      = 'default';
+    const actionField = jQuery('input[name="Action"]');
+    if (null != actionField) action = actionField[0].value || 'default';
+
+    let   quote       = '-';
+    const quoteField  = jQuery('input[name="QuoteTransaction"]');
+    if (null != quoteField) quote = quoteField[0].value || '-';
+
+    const backupId    = `RT_${ticketId}_${action}_${quote}_Backup`;
+    const draftId     = `RT_${ticketId}_${action}_${quote}_Draft`;
+    const draft       = localStorage.getItem(draftId) || '';
+    const state       = { save: true, };
+
+    jQuery().ready(() => {
+
+        // Submit button
+        jQuery('SubmitTicket').on('click', () => {
+            state['save'] = false;
+            localStorage.removeItem(backupId);
+            localStorage.removeItem(draftId);
+            state['save'] = true;
+        });
+
+        if (CKEDITOR.instances && CKEDITOR.instances['UpdateContent']) {
+            const editor = CKEDITOR.instances['UpdateContent'];
+
+            editor.on('instanceReady', function () {
+                // Ha nincs draft, akkor elmentjuk az eredeti szoveget az editorbol
+                if (0 == draft.length) localStorage.setItem(backupId, editor.getData());
+                
+                // Ha van draft, akkor betoltjuk az editorba az elmentett szoveget
+                if (0 < draft.length) editor.setData( draft );
+
+                this.on('change', () => {
+                    if (state['save']) localStorage.setItem(draftId, editor.getData());
+                });
+            });
+
+            // ClearDraft button
+            jQuery('#ClearDraft').on('click', () => {
+                // Betoltjuk az editorba a backup-ot
+                state['save'] = false;
+                editor.setData( localStorage.getItem(backupId) );
+                state['save'] = true;
+                
+                // Takaritunk
+                localStorage.removeItem(draftId);
+            });
+        }
+    });
+
+</script>
