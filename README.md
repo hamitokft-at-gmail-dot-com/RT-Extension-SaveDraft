@@ -1,7 +1,7 @@
 # RT-Extension-SaveDraft
 
 ## Leírás
-Hozzászólásoknál (Ticket/Update.html) a Richtext editorba írt szöveget a bngésző localstore-ba menti és szükség esetén visszatölti.
+Hozzászólásoknál (Ticket/Update.html) a Richtext editorba írt szöveget a böngésző localstore-ba menti és szükség esetén visszatölti.
 
 #### Tulajdonságok
 
@@ -26,4 +26,4 @@ rm -rf /opt/rt5/var/mason_data/obj
 
 ### TODO
 - A lokalizázió nem működik, de nem jöttem rá, mi a baja....
-- A ticket and transaction reszben a select valtast nem koveti.....
+- A ticket and transaction részben a select váltást nem követi.....
