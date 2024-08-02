@@ -20,6 +20,10 @@
 
     jQuery().ready(() => {
 
+        jQuery('#UpdateType').on('change', function() {
+            console.log('UpdateType',  this.value );
+        });
+
         // Submit button
         jQuery('SubmitTicket').on('click', () => {
             state['save'] = false;
@@ -28,6 +32,7 @@
             state['save'] = true;
         });
 
+        // RichTextEditor
         if (CKEDITOR.instances && CKEDITOR.instances['UpdateContent']) {
             const editor = CKEDITOR.instances['UpdateContent'];
 
@@ -48,6 +53,29 @@
                 // Betoltjuk az editorba a backup-ot
                 state['save'] = false;
                 editor.setData( localStorage.getItem(backupId) );
+                state['save'] = true;
+                
+                // Takaritunk
+                localStorage.removeItem(draftId);
+            });
+        } else {
+            // TextArea
+
+            // Ha nincs draft, akkor elmentjuk az eredeti szoveget az textareabol
+            if (0 == draft.length) localStorage.setItem(backupId, jQuery('#UpdateContent').val());
+
+            // Ha van draft, akkor betoltjuk az textareaba az elmentett szoveget
+            if (0 < draft.length) jQuery('#UpdateContent').val(draft);
+
+            jQuery('#UpdateContent').on('input propertychange', () => {
+                if (state['save']) if (state['save']) localStorage.setItem(draftId, jQuery('#UpdateContent').val());
+            });
+
+            // ClearDraft button
+            jQuery('#ClearDraft').on('click', () => {
+                // Betoltjuk az textareaba a backup-ot
+                state['save'] = false;
+                jQuery('#UpdateContent').val(localStorage.getItem(backupId));
                 state['save'] = true;
                 
                 // Takaritunk
