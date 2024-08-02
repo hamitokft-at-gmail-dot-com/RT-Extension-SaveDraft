@@ -12,7 +12,7 @@ RT 5.0.x
 1. végrehaitani a következő parancsokat
 ````
 cd /opt/rt5/local/plugins
-git clone git clone https://github.com/hamitokft-at-gmail-dot-com/RT-Extension-SaveDraft
+git clone https://github.com/hamitokft-at-gmail-dot-com/RT-Extension-SaveDraft
 ````
 2. az  /opt/rt5/etc/RT_SiteConfig.pm fájlba beírni
 ````
