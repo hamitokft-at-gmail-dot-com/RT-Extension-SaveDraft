@@ -25,5 +25,6 @@ rm -rf /opt/rt5/var/mason_data/obj
 4. újraindítani a web szervert.
 
 ### TODO
-- A lokalizázió nem működik, de nem jöttem rá, mi a baja....
 - A ticket and transaction részben a select váltást nem követi.....
+- Az modal overlay-e mögött aktív marad a main menü, és ezen nem könnyű segíteni az RT-be történő
+beleírás nélkül, a z-index állítgatás nem oldja meg a stacking context kezlés miatt.
