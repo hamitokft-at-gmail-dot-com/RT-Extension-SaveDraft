@@ -20,6 +20,30 @@
 
     jQuery().ready(() => {
 
+        // Display modal
+        if (draft) {
+            const modal = jQuery('#SaveDraft');
+            if (modal) {
+                modal.css("display", "block");
+            }
+
+            const clearButton = jQuery("#SaveDraft-clear");
+            clearButton.on('click', () => {
+                localStorage.removeItem(draftId);
+                modal.css("display", "none");
+            } );
+
+            const loadButton = jQuery("#SaveDraft-load");
+            loadButton.on('click', () => {
+                if (CKEDITOR.instances && CKEDITOR.instances['UpdateContent']) {
+                    CKEDITOR.instances['UpdateContent'].setData( draft );
+                } else {
+                    jQuery('#UpdateContent').val(draft);
+                }
+                modal.css("display", "none");
+            } );
+        }
+
         jQuery('#UpdateType').on('change', function() {
             console.log('UpdateType',  this.value );
         });
@@ -40,9 +64,6 @@
                 // Ha nincs draft, akkor elmentjuk az eredeti szoveget az editorbol
                 if (0 == draft.length) localStorage.setItem(backupId, editor.getData());
                 
-                // Ha van draft, akkor betoltjuk az editorba az elmentett szoveget
-                if (0 < draft.length) editor.setData( draft );
-
                 this.on('change', () => {
                     if (state['save']) localStorage.setItem(draftId, editor.getData());
                 });
@@ -63,9 +84,6 @@
 
             // Ha nincs draft, akkor elmentjuk az eredeti szoveget az textareabol
             if (0 == draft.length) localStorage.setItem(backupId, jQuery('#UpdateContent').val());
-
-            // Ha van draft, akkor betoltjuk az textareaba az elmentett szoveget
-            if (0 < draft.length) jQuery('#UpdateContent').val(draft);
 
             jQuery('#UpdateContent').on('input propertychange', () => {
                 if (state['save']) if (state['save']) localStorage.setItem(draftId, jQuery('#UpdateContent').val());

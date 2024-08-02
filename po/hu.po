@@ -4,6 +4,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit"
 
-#: Drafts
-msgid "ClearDraft"
-msgstr "Piszkozat törlés"
+# Modal
+msgid "SaveDraftModalHeader"
+msgstr "Piszkozat"
+
+# Modal
+msgid "SaveDraftModalBody"
+msgstr "A hibajegy korábban készült piszozatot tartalmaz"
+
+# Modal
+msgid "SaveDraftModalLoad"
+msgstr "Betölt"
+
+# Modal
+msgid "SaveDraftModalIgnore"
+msgstr "Nem érdekel"
+
+# Modal
+msgid "SaveDraftModalClear"
+msgstr "Töröl"

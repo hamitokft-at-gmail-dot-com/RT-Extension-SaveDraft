@@ -4,6 +4,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit"
 
-#: ClearDraft
-msgid "ClearDraft"
-msgstr "Delete draft"
+# Modal
+msgid "SaveDraftModalHeader"
+msgstr "Draft"
+
+# Modal
+msgid "SaveDraftModalBody"
+msgstr "This ticket has a save draft"
+
+# Modal
+msgid "SaveDraftModalLoad"
+msgstr "Load"
+
+# Modal
+msgid "SaveDraftModalIgnore"
+msgstr "Ignore"
+
+# Modal
+msgid "SaveDraftModalClear"
+msgstr "Clear"

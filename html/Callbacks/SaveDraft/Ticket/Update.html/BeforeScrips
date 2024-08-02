@@ -1,0 +1,107 @@
+<div id="SaveDraft" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>
+                <% loc("SaveDraftModalHeader") %>
+            </h2>
+            <span id="SaveDraft-close" class="modal-close">
+                &times;
+            </span>
+       </div>
+
+        <div class="modal-body">
+            <p>
+                <% loc("SaveDraftModalBody") %>
+            </p>
+        </div>
+
+        <div class="modal-footer">
+            <button id="SaveDraft-load" type="button">
+                <% loc("SaveDraftModalLoad") %>
+            </button>
+            <button id="SaveDraft-ignore" type="button">
+                <% loc("SaveDraftModalIgnore") %>
+            </button>
+            <button id="SaveDraft-clear" type="button">
+                <% loc("SaveDraftModalClear") %>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal =  jQuery("#SaveDraft");
+
+    const closeButton = jQuery("#SaveDraft-close");
+    closeButton.on('click', () => modal.css("display", "none") );
+
+    const ignoreButton = jQuery("#SaveDraft-ignore");
+    ignoreButton.on('click', () => modal.css("display", "none") );
+</script>
+
+<style>
+    .modal {
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+        display: none;
+        height: 100%;
+        left: 0;
+        overflow: auto;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 999;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        border: 1px solid #888;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        margin: auto;
+        padding: 0;
+        position: relative;
+        top: 200px;
+        width: 50%;
+        animation-name: animatetop;
+        animation-duration: 0.4s
+    }
+
+    .modal-header {
+        align-items: center;
+        background-color: #1976D2;
+        color: white;
+        padding: 4px 16px;
+    }
+
+    .modal-close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .modal-close:hover,
+    .modal-close:focus {
+        color: black;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    /* Modal Body */
+    .modal-body {
+        padding: 2px 16px;
+    }
+
+    .modal-footer {
+        color: white;
+        padding: 2px 16px;
+    }
+
+    @keyframes animatetop {
+        from {top: -300px; opacity: 0}
+        to {top: 200px; opacity: 1}
+    } 
+</style>
+
+<%ARGS>
+</%ARGS>
