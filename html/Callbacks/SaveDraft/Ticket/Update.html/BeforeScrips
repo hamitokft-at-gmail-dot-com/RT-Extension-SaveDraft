@@ -89,6 +89,7 @@
 
     /* Modal Body */
     .modal-body {
+        font-size: 24px;
         padding: 2px 16px;
     }
 
