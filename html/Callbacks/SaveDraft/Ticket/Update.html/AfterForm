@@ -3,6 +3,38 @@
 </%init>
 
 <script>
+
+    const loadDraft  = (dm) => {
+        if (dm.has('Subject')) {
+            jQuery("input[name='Subject']").val(dm.get('Subject'));
+        }
+
+        if (dm.has('UpdateContent')) {
+            if (CKEDITOR.instances && CKEDITOR.instances['UpdateContent']) {
+                CKEDITOR.instances['UpdateContent'].setData(dm.get('UpdateContent'));
+            } else {
+                jQuery('#UpdateContent').val(dm.get('UpdateContent'));
+            }
+        }
+
+        if (dm.has('Status')) {
+            jQuery("select[name='Status']").val(dm.get('Status')).change();;
+        }
+
+        if (dm.has('Owner')) {
+            jQuery("select[name='Owner']").val(dm.get('Owner')).change();;
+        }
+        
+        if (dm.has('UpdateTimeWorked')) {
+            jQuery("input[name='UpdateTimeWorked']").val(dm.get('UpdateTimeWorked'));
+        }
+
+        if (dm.has('UpdateTimeWorked-TimeUnits')) {
+            jQuery("select[name='UpdateTimeWorked-TimeUnits']").val(dm.get('UpdateTimeWorked-TimeUnits')).change();;
+        }
+
+    };
+
     const ticketId    = "<% $id %>" || 'unknown';
 
     let   action      = 'default';
@@ -13,47 +45,40 @@
     const quoteField  = jQuery('input[name="QuoteTransaction"]');
     if (null != quoteField) quote = quoteField[0].value || '-';
 
-    const backupId    = `RT_${ticketId}_${action}_${quote}_Backup`;
     const draftId     = `RT_${ticketId}_${action}_${quote}_Draft`;
-    const draft       = localStorage.getItem(draftId) || '';
+    const draftJson   = localStorage.getItem(draftId);
+    const draftAray   = null == draftJson     ? new Array() : JSON.parse(draftJson);
+    const draftMap    = 0 == draftAray.length ? new Map()   : new Map(draftAray);
+    
     const state       = { save: true, };
 
     jQuery().ready(() => {
 
         // Display modal
-        if (draft) {
+        if (0 < draftMap.size) {
             const modal = jQuery('#SaveDraft');
             if (modal) {
                 modal.css("display", "block");
             }
 
+            // Clear button
             const clearButton = jQuery("#SaveDraft-clear");
             clearButton.on('click', () => {
                 localStorage.removeItem(draftId);
                 modal.css("display", "none");
             } );
 
+            // Load button
             const loadButton = jQuery("#SaveDraft-load");
             loadButton.on('click', () => {
-                if (CKEDITOR.instances && CKEDITOR.instances['UpdateContent']) {
-                    CKEDITOR.instances['UpdateContent'].setData( draft );
-                } else {
-                    jQuery('#UpdateContent').val(draft);
-                }
+                loadDraft(draftMap);
                 modal.css("display", "none");
             } );
         }
-
-        jQuery('#UpdateType').on('change', function() {
-            console.log('UpdateType',  this.value );
-        });
-
-        // Submit button
-        jQuery('SubmitTicket').on('click', () => {
-            state['save'] = false;
-            localStorage.removeItem(backupId);
-            localStorage.removeItem(draftId);
-            state['save'] = true;
+        
+        jQuery("input[name='Subject']").on('input propertychange', function() {
+            draftMap.set('Subject', this.value);
+            localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
         });
 
         // RichTextEditor
@@ -61,45 +86,58 @@
             const editor = CKEDITOR.instances['UpdateContent'];
 
             editor.on('instanceReady', function () {
-                // Ha nincs draft, akkor elmentjuk az eredeti szoveget az editorbol
-                if (0 == draft.length) localStorage.setItem(backupId, editor.getData());
                 
                 this.on('change', () => {
-                    if (state['save']) localStorage.setItem(draftId, editor.getData());
+                    if (state['save']) {
+                        draftMap.set('UpdateContent', editor.getData());
+                        localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
+                    }
                 });
             });
 
-            // ClearDraft button
-            jQuery('#ClearDraft').on('click', () => {
-                // Betoltjuk az editorba a backup-ot
-                state['save'] = false;
-                editor.setData( localStorage.getItem(backupId) );
-                state['save'] = true;
-                
-                // Takaritunk
-                localStorage.removeItem(draftId);
-            });
         } else {
             // TextArea
-
-            // Ha nincs draft, akkor elmentjuk az eredeti szoveget az textareabol
-            if (0 == draft.length) localStorage.setItem(backupId, jQuery('#UpdateContent').val());
-
-            jQuery('#UpdateContent').on('input propertychange', () => {
-                if (state['save']) if (state['save']) localStorage.setItem(draftId, jQuery('#UpdateContent').val());
-            });
-
-            // ClearDraft button
-            jQuery('#ClearDraft').on('click', () => {
-                // Betoltjuk az textareaba a backup-ot
-                state['save'] = false;
-                jQuery('#UpdateContent').val(localStorage.getItem(backupId));
-                state['save'] = true;
-                
-                // Takaritunk
-                localStorage.removeItem(draftId);
+            jQuery('#UpdateContent').on('input propertychange', (e) => {
+                if (state['save']) {
+                    draftMap.set('UpdateContent', e.val());
+                    localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
+                }
             });
         }
+
+        jQuery("input[name='SubmitTicket']").on('click', () => {
+            state['save'] = false;
+            localStorage.removeItem(draftId);
+            state['save'] = true;
+        });
+
+        jQuery("select[name='Status']").on('change', function() {
+            if (state['save']) {
+                draftMap.set('Status', this.value);
+                localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
+            }
+        });
+
+        jQuery("select[name='Owner']").on('change', function() {
+            if (state['save']) {
+                draftMap.set('Owner', this.value);
+                localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
+            }
+        });
+        
+        jQuery("input[name='UpdateTimeWorked']").on('input propertychange', function() {
+            if (state['save']) {
+                draftMap.set('UpdateTimeWorked', this.value);
+                localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
+            }
+        });
+
+        jQuery("select[name='UpdateTimeWorked-TimeUnits']").on('change', function() {
+            if (state['save']) {
+                draftMap.set('UpdateTimeWorked-TimeUnits', this.value);
+                localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
+            }
+        });
     });
 
 </script>
