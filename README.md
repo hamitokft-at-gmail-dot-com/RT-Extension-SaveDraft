@@ -1,30 +1,47 @@
 # RT-Extension-SaveDraft
 
+- [RT-Extension-SaveDraft](#rt-extension-savedraft)
+  - [Leírás](#leírás)
+  - [Tulajdonságok](#tulajdonságok)
+    - [RT kompatibilitás](#rt-kompatibilitás)
+    - [Nyelvek](#nyelvek)
+  - [A telepítés lépései](#a-telepítés-lépései)
+
 ## Leírás
-Hozzászólásoknál (Ticket/Update.html) a Richtext editorba írt szöveget a böngésző localstore-ba menti és szükség esetén visszatölti.
 
-#### Tulajdonságok
+Hozzászólásoknál (Ticket/Update.html) a felhsználó által megadott adatokat, szöveget a böngésző localstore-jába menti és a következő oldalbetöltésnél modal-t jelenít meg, ahol az elmentett adatok
+kezelhetőek. A hozzászólásokat megkülönbözteti a hibajegy száma, a hozzászólás típua és az idézés típusa szerint és ennek megfelelően tárolja. A tárolt piszkozatokat a hozzászólás elküldésével vagy a modal-on keresztül lehet törölni.
 
-## RT kompatibilitás
+## Tulajdonságok
+
+### RT kompatibilitás
+
 RT 5.0.x
 
-## Telepítés
-1. végrehaitani a következő parancsokat
-````
+### Nyelvek
+
+- magyar
+- angol
+
+## A telepítés lépései
+
+- a repository klónozása
+
+```shell
 cd /opt/rt5/local/plugins
 git clone https://github.com/hamitokft-at-gmail-dot-com/RT-Extension-SaveDraft
-````
-2. az  /opt/rt5/etc/RT_SiteConfig.pm fájlba beírni
-````
-Plugin('RT::Extension::SaveDraft');
-````
-3. törölni a mason cache-t
-````
-rm -rf /opt/rt5/var/mason_data/obj
-````
-4. újraindítani a web szervert.
+```
 
-### TODO
-- A ticket and transaction részben a select váltást nem követi.....
-- Az modal overlay-e mögött aktív marad a main menü, és ezen nem könnyű segíteni az RT-be történő
-beleírás nélkül, a z-index állítgatás nem oldja meg a stacking context kezlés miatt.
+- a plugin regisztrációja
+
+```shell
+echo 'Plugin('RT::Extension::SaveDraft');' >> /opt/rt5/etc/RT_SiteConfig.pm
+```
+
+- a mason obnect cache törlése
+
+```shell
+rm -rf /opt/rt5/var/mason_data/obj
+```
+
+- A web szerver újraindítása

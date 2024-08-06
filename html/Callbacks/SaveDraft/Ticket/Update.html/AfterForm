@@ -29,6 +29,35 @@
     };
 
     const loadDraft  = (dm) => {
+
+        if (dm.has('UpdateCc')) {
+            const selected = new Array;
+            const updateCc = jQuery("#UpdateCc")[0].selectize;
+            Object.values(JSON.parse(dm.get('UpdateCc'))).forEach(element => {
+                const option = {
+                    label: element['label'],
+                    value: element['value'],
+                };
+                updateCc.addOption(option);
+                selected.push(option.value); 
+            });
+            updateCc.setValue(selected);
+        }
+
+        if (dm.has('UpdateBcc')) {
+            const selected = new Array;
+            const updateBcc = jQuery("#UpdateBcc")[0].selectize;
+            Object.values(JSON.parse(dm.get('UpdateBcc'))).forEach(element => {
+                const option = {
+                    label: element['label'],
+                    value: element['value'],
+                };
+                updateBcc.addOption(option);
+                selected.push(option.value); 
+            });
+            updateBcc.setValue(selected);
+        }
+
         if (dm.has('Subject')) {
             jQuery("input[name='Subject']").val(dm.get('Subject'));
         }
@@ -84,6 +113,16 @@
 
         // Display modal
         displayModal(draftMap);
+
+        jQuery("#UpdateCc").on('change', function() {
+            draftMap.set('UpdateCc', JSON.stringify(this.selectize.options));
+            localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
+        });
+
+        jQuery("#UpdateBcc").on('change', function() {
+            draftMap.set('UpdateBcc', JSON.stringify(this.selectize.options));
+            localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
+        });
 
         jQuery("input[name='Subject']").on('input propertychange', function() {
             draftMap.set('Subject', this.value);
