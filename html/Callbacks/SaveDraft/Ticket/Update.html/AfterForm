@@ -4,6 +4,30 @@
 
 <script>
 
+    const displayModal = (dm) => {
+        if (0 < dm.size) {
+            const modal = jQuery('#SaveDraft');
+            if (modal) {
+                modal.css("display", "block");
+            }
+
+            // Clear button
+            const clearButton = jQuery("#SaveDraft-clear");
+            clearButton.on('click', () => {
+                localStorage.removeItem(draftId);
+                modal.css("display", "none");
+            } );
+
+            // Load button
+            const loadButton = jQuery("#SaveDraft-load");
+            loadButton.on('click', () => {
+                loadDraft(dm);
+                modal.css("display", "none");
+            } );
+        }
+
+    };
+
     const loadDraft  = (dm) => {
         if (dm.has('Subject')) {
             jQuery("input[name='Subject']").val(dm.get('Subject'));
@@ -19,6 +43,10 @@
 
         if (dm.has('Status')) {
             jQuery("select[name='Status']").val(dm.get('Status')).change();;
+        }
+
+        if (dm.has('UpdateType')) {
+            jQuery("#UpdateType").val(dm.get('UpdateType')).change();;
         }
 
         if (dm.has('Owner')) {
@@ -55,27 +83,8 @@
     jQuery().ready(() => {
 
         // Display modal
-        if (0 < draftMap.size) {
-            const modal = jQuery('#SaveDraft');
-            if (modal) {
-                modal.css("display", "block");
-            }
+        displayModal(draftMap);
 
-            // Clear button
-            const clearButton = jQuery("#SaveDraft-clear");
-            clearButton.on('click', () => {
-                localStorage.removeItem(draftId);
-                modal.css("display", "none");
-            } );
-
-            // Load button
-            const loadButton = jQuery("#SaveDraft-load");
-            loadButton.on('click', () => {
-                loadDraft(draftMap);
-                modal.css("display", "none");
-            } );
-        }
-        
         jQuery("input[name='Subject']").on('input propertychange', function() {
             draftMap.set('Subject', this.value);
             localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
@@ -109,6 +118,13 @@
             state['save'] = false;
             localStorage.removeItem(draftId);
             state['save'] = true;
+        });
+
+        jQuery("#UpdateType").on('change', function() {
+            if (state['save']) {
+                draftMap.set('UpdateType', this.value);
+                localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
+            }
         });
 
         jQuery("select[name='Status']").on('change', function() {
