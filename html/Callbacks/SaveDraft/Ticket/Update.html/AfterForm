@@ -58,8 +58,8 @@
             updateBcc.setValue(selected);
         }
 
-        if (dm.has('Subject')) {
-            jQuery("input[name='Subject']").val(dm.get('Subject'));
+        if (dm.has('UpdateSubject')) {
+            jQuery("input[name='UpdateSubject']").val(dm.get('UpdateSubject'));
         }
 
         if (dm.has('UpdateContent')) {
@@ -124,8 +124,8 @@
             localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
         });
 
-        jQuery("input[name='Subject']").on('input propertychange', function() {
-            draftMap.set('Subject', this.value);
+        jQuery("input[name='UpdateSubject']").on('input propertychange', function() {
+            draftMap.set('UpdateSubject', this.value);
             localStorage.setItem(draftId, JSON.stringify(Array.from(draftMap.entries())));
         });
 
